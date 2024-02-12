@@ -1,5 +1,5 @@
 const getState = ({ getStore, getActions, setStore }) => {
-  const apiUrl = "budget-tracker-y3t3.onrender.com";
+  const apiUrl = "https://budget-tracker-y3t3.onrender.com";
   return {
     store: {
       user_info: null,
