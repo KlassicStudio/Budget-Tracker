@@ -17,6 +17,8 @@ from api.commands import setup_commands
 from flask_jwt_extended import create_access_token, JWTManager
 from user_agents import parse
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
+from datetime import datetime
+import pytz
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import *
@@ -172,7 +174,8 @@ def get_user_activity():
     user = User.query.filter_by(email=current_user_email).first()
 
     if user:
-        current_time = datetime.utcnow().strftime("%B %d, %Y %I:%M %p")
+        eastern = pytz.timezone('US/Eastern')
+        current_time = datetime.now(eastern).strftime("%B %d, %Y %I:%M %p")
 
         user_agent_string = request.user_agent.string
         user_agent = parse(user_agent_string)

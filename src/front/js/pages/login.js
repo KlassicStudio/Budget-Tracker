@@ -6,20 +6,24 @@ import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Spinner from "react-bootstrap/Spinner";
 import "../../styles/login.css";
 import logo from "../../img/BudgetAppLogo6.png";
 
 export const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { store, actions } = useContext(Context);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = () => {
+    setIsLoading(true);
     actions.login(email, password).then(() => {
       actions.trackUserActivity();
       actions.getAllUserActivity();
       navigate("/dashboard");
+      setIsLoading(false);
     });
   };
 
@@ -76,8 +80,15 @@ export const Login = () => {
               variant="primary"
               type="submit"
               onClick={handleLogin}
+              disabled={isLoading} // disable the button when loading
             >
-              Login
+              {isLoading ? (
+                <Spinner animation="border" role="status" size="sm">
+                  <span className="sr-only">Loading...</span>
+                </Spinner>
+              ) : (
+                "Login"
+              )}
             </Button>
             <span className="text-center">
               <a href="/forgot-password" className="link-info">

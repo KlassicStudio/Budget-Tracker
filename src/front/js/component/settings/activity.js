@@ -15,8 +15,10 @@ export const Activity = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = store.activity.User
-    ? store.activity.User.slice(indexOfFirstItem, indexOfLastItem)
-    : [];
+  ? store.activity.User
+      .sort((a, b) => new Date(b.time) - new Date(a.time)) // sort activities
+      .slice(indexOfFirstItem, indexOfLastItem)
+  : [];
 
   const totalPages = store.activity.User
     ? Math.ceil(store.activity.User.length / itemsPerPage)
@@ -55,17 +57,17 @@ export const Activity = () => {
       </span>
       <div className="activity-list">
         <ListGroup className="d-flex flex-column gap-3">
-          {currentItems.map((el, key) => (
-            <div key={el.id}>
-              <ListGroup.Item className="rounded">
-                <strong>Device: </strong>
-                {el.device} <br />
-                <strong>Location: </strong>
-                {el.ip} <br />
-                <strong>Time: </strong>
-                {el.time}
-              </ListGroup.Item>
-            </div>
+        {currentItems.map((el, key) => (
+          <div key={el.id}>
+            <ListGroup.Item className="rounded">
+              <strong>Device: </strong>
+              {el.device} <br />
+              <strong>Location: </strong>
+              {el.ip} <br />
+              <strong>Time: </strong>
+              {new Date(el.time).toLocaleString()}
+            </ListGroup.Item>
+          </div>
           ))}
         </ListGroup>
         <div className="pagination-buttons">{renderPaginationButtons()}</div>
